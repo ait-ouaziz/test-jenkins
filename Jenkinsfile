@@ -8,14 +8,15 @@ pipeline {
        stage('Stop and Remove Existing Container') {
            steps {
                script {
-                   // Define the name or ID of the existing container
-                   def existingContainerName = 'test-jenkins'
-
-                   // Stop and remove the existing container if it exists
-                   if (docker.image(existingContainerName).exists()) {
-                       docker.image(existingContainerName).stop()
-                       docker.image(existingContainerName).remove()
-                   }
+                    def existingContainerName = 'test-jenkins'
+                    try {
+                        docker.image(existingContainerName).inside {
+                            docker.image(existingContainerName).stop()
+                            docker.image(existingContainerName).remove()
+                        }
+                    } catch (Exception e) {
+                        echo 'Docker image does not exist'
+                    }
                }
            }
        }
