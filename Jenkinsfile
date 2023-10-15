@@ -8,6 +8,7 @@ pipeline {
        stage('Stop and Remove Existing Container') {
            steps {
                script {
+                    sh 'docker --version'
                     def existingContainerName = 'test-jenkins'
                     try {
                         docker.image(existingContainerName).inside {
