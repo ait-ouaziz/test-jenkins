@@ -23,8 +23,12 @@ pipeline {
        stage('Remove Specific Docker Image') {
            steps {
                script {
-                   def imageName = 'test-jenkins'  // Replace with the name and tag of the image you want to delete
-                   sh "docker rmi $imageName"
+                    try {
+                   def imageName = 'test-jenkins'
+                   docker.image(imageName).remove(force: true)
+                    } catch (Exception e) {
+                        echo 'Docker image does not exist'
+                    }
                }
            }
        }
