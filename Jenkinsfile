@@ -1,5 +1,8 @@
 pipeline {
    agent any
+    triggers {
+           pollSCM('H/1 * * * *') // Poll SCM every 5 minutes
+       }
 
    stages {
        stage('Stop and Remove Existing Container') {
@@ -16,7 +19,6 @@ pipeline {
                }
            }
        }
-
        stage('Remove Specific Docker Image') {
            steps {
                script {
@@ -25,7 +27,6 @@ pipeline {
                }
            }
        }
-
        stage('Build Docker Image') {
            steps {
                script {
